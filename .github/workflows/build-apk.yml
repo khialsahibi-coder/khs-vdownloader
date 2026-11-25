@@ -36,16 +36,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk python3-pip autoconf libtool \
-            pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
-            libtinfo5 cmake libffi-dev libssl-dev \
-            libgles2-mesa-dev libgbm-dev libdrm-dev \
-            libx11-dev libxext-dev libxfixes-dev libxi-dev \
-            libxrender-dev libxrandr-dev libxinerama-dev \
-            libxcursor-dev libxcomposite-dev libxdamage-dev \
-            libasound2-dev libpulse-dev libdbus-1-dev \
-            libudev-dev libwayland-dev libxkbcommon-dev \
-            freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev
+          git zip unzip openjdk-17-jdk python3-pip autoconf libtool \
+          pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
+          libtinfo5 cmake libffi-dev libssl-dev
 
       - name: Install buildozer with pinned dependencies
         run: |
