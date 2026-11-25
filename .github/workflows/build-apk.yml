@@ -50,7 +50,6 @@ jobs:
       - name: Install buildozer with pinned dependencies
         run: |
           pip install --upgrade pip setuptools wheel
-          # CRITICAL: cython 0.29.36 - newer versions break buildozer
           pip install cython==0.29.36
           pip install buildozer
 
