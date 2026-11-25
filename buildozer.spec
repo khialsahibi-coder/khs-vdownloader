@@ -1,4 +1,4 @@
-# buildozer.spec - FIXED VERSION (key additions)
+# buildozer.spec - WITH PINNED VERSIONS
 
 [app]
 title = KHS VDownloader
@@ -8,20 +8,19 @@ source.dir = .
 source.include_exts = py,kv,png,jpg,at,txt,xml,java
 version = 1.0.0
 
-# Requirements - Python packages to include
-requirements = python3,kivy,yt-dlp,ffmpeg
+# CRITICAL: Pin versions for buildozer compatibility
+# Python 3.10 required (3.11+ breaks buildozer)
+# cython 0.29.36 required (newer breaks buildozer)
+# yt-dlp pinned to avoid conflicts
+requirements = python3==3.10.*,kivy,yt-dlp==2024.1.1,ffmpeg
 
-# CRITICAL: Add Java sources to the build
+# CRITICAL: Include Java sources
 android.add_src = app/src/main/java
-
-# CRITICAL: Set the main activity class (Java, not Python)
 android.activity_class_name = com.khs.vdownloader.MainActivity
-
-# Use sdl2 bootstrap for Java+Python hybrid apps
 p4a.bootstrap = sdl2
 
-# Permissions
-android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE,INTERNET,ACCESS_NETWORK_STATE
+# Permissions (added FOREGROUND_SERVICE_TYPE_DOWNLOAD)
+android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE,FOREGROUND_SERVICE_TYPE_DOWNLOAD,INTERNET,ACCESS_NETWORK_STATE
 
 # Android config
 android.api = 33
@@ -31,7 +30,7 @@ android.ndk_api = 21
 android.private_storage = True
 android.archs = arm64-v8a, armeabi-v7a
 
-# Python-for-android config
+# Python-for-android
 p4a.fork = kivy
 p4a.branch = master
 
