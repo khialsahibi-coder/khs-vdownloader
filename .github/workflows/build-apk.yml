@@ -26,7 +26,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.10 (REQUIRED for buildozer)
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -47,16 +47,12 @@ jobs:
             libudev-dev libwayland-dev libxkbcommon-dev \
             freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev
 
-      - name: Install buildozer and dependencies
+      - name: Install buildozer with pinned dependencies
         run: |
           pip install --upgrade pip setuptools wheel
-          pip install buildozer cython==0.29.36
-
-      - name: Set up Android SDK
-        run: |
-          mkdir -p $HOME/.android
-          echo "count=0" > $HOME/.android/repositories.cfg
-          echo "### User Sources for Android SDK Manager" >> $HOME/.android/repositories.cfg
+          # CRITICAL: cython 0.29.36 - newer versions break buildozer
+          pip install cython==0.29.36
+          pip install buildozer
 
       - name: Build APK
         env:
@@ -83,16 +79,6 @@ jobs:
           path: bin/KHS-VDownloader-debug.apk
           retention-days: 30
 
-      - name: Create Release (on tag)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: bin/KHS-VDownloader-debug.apk
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # Release build job (triggered manually or on tag)
   build-release:
     name: Build Release APK
     runs-on: ubuntu-latest
@@ -102,7 +88,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
@@ -116,10 +102,11 @@ jobs:
             pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
             libtinfo5 cmake libffi-dev libssl-dev
 
-      - name: Install buildozer and dependencies
+      - name: Install buildozer with pinned dependencies
         run: |
           pip install --upgrade pip setuptools wheel
-          pip install buildozer cython==0.29.36
+          pip install cython==0.29.36
+          pip install buildozer
 
       - name: Build Release APK
         env:
