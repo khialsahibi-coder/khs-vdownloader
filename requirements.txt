@@ -1,0 +1,5 @@
+python3==3.10.*
+kivy
+yt-dlp==2024.1.1
+ffmpeg
+cython==0.29.36
