@@ -30,21 +30,41 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          # Don't cache pip - no requirements.txt in this project
           cache: ''
 
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-          git zip unzip openjdk-17-jdk python3-pip autoconf libtool \
-          pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
-          libtinfo5 cmake libffi-dev libssl-dev
+            git zip unzip openjdk-17-jdk python3-pip autoconf libtool \
+            pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev \
+            libtinfo5 cmake libffi-dev libssl-dev \
+            libgles2-mesa-dev libgbm-dev libdrm-dev \
+            libx11-dev libxext-dev libxfixes-dev libxi-dev \
+            libxrender-dev libxrandr-dev libxinerama-dev \
+            libxcursor-dev libxcomposite-dev libxdamage-dev \
+            libasound2-dev libpulse-dev libdbus-1-dev \
+            libudev-dev libwayland-dev libxkbcommon-dev \
+            freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev
 
       - name: Install buildozer with pinned dependencies
         run: |
           pip install --upgrade pip setuptools wheel
+          # CRITICAL: cython 0.29.36 - newer versions break buildozer
           pip install cython==0.29.36
           pip install buildozer
+
+      - name: Verify project structure
+        run: |
+          echo "=== Project files ==="
+          ls -la
+          echo "=== buildozer.spec ==="
+          cat buildozer.spec
+          echo "=== Main Python ==="
+          cat main.py
+          echo "=== Java sources ==="
+          find app/src/main/java -name "*.java" | head -20
 
       - name: Build APK
         env:
@@ -61,6 +81,8 @@ jobs:
             ls -la bin/
           else
             echo "No APK found in bin/"
+            echo "=== Buildozer log ==="
+            cat .buildozer/android/platform/build-*/dists/*/gradle/build/outputs/apk/debug/*.apk 2>/dev/null || true
             exit 1
           fi
 
@@ -70,6 +92,15 @@ jobs:
           name: KHS-VDownloader-APK
           path: bin/KHS-VDownloader-debug.apk
           retention-days: 30
+
+      - name: Create Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: bin/KHS-VDownloader-debug.apk
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-release:
     name: Build Release APK
@@ -84,7 +115,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          cache: 'pip'
+          cache: ''
 
       - name: Install system dependencies
         run: |
@@ -119,7 +150,7 @@ jobs:
           fi
 
       - name: Upload Release APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload_artifact@v4
         with:
           name: KHS-VDownloader-Release-APK
           path: bin/KHS-VDownloader-release.apk
