@@ -14,7 +14,7 @@ p4a.bootstrap = sdl2
 
 android.permissions = WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE,FOREGROUND_SERVICE,INTERNET,ACCESS_NETWORK_STATE
 
-android.api = 30
+android.api = 21.1.2
 android.minapi = 21
 android.ndk = 25b
 android.ndk_api = 21
