@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KHS VDownloader</string>
+    <string name="enter_url">Enter video URL</string>
+    <string name="download">Download Video</string>
+    <string name="select_quality">Select Video Quality</string>
+    <string name="best">Best</string>
+    <string name="hd720">720p</string>
+    <string name="_480p">480p</string>
+    <string name="_360p">360p</string>
+    <string name="audio_only">Audio only</string>
+    <string name="best_format">Best format</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_url_empty">Please enter a video URL</string>
+    <string name="error_download_failed">Download failed</string>
+    <string name="success_downloaded">Downloaded successfully</string>
+    <string name="sharing">Sharing...</string>
+
+</resources>
